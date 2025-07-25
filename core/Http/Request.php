@@ -13,6 +13,8 @@ class Request
     protected string $method;
     protected string $uri;
     protected string $rawContent;
+    protected Session $session;
+    protected array $routeAttributes = [];
 
     public function __construct()
     {
@@ -25,6 +27,7 @@ class Request
         $this->method = $this->server['REQUEST_METHOD'] ?? 'GET';
         $this->uri = $this->parseUri();
         $this->rawContent = file_get_contents('php://input');
+        $this->session = Session::getInstance();
     }
 
     // Return all HTTP headers as an associative array
@@ -64,7 +67,7 @@ class Request
     }
 
     // Get query parameter or all query parameters
-    public function query(string $key = null, $default = null)
+    public function query(?string $key = null, $default = null)
     {
         if ($key === null) {
             return $this->query;
@@ -73,7 +76,7 @@ class Request
     }
 
     // Get POST (request) parameter or all POST data
-    public function post(string $key = null, $default = null)
+    public function post(?string $key = null, $default = null)
     {
         if ($key === null) {
             return $this->request;
@@ -82,19 +85,12 @@ class Request
     }
 
     // Unified input method: POST then GET
-    public function input(string $key = null, $default = null)
+    public function input(?string $key = null, $default = null)
     {
         if ($key === null) {
             return array_merge($this->query, $this->request);
         }
-
-        if (isset($this->request[$key])) {
-            return $this->request[$key];
-        }
-        if (isset($this->query[$key])) {
-            return $this->query[$key];
-        }
-        return $default;
+        return $this->query[$key] ?? $this->request[$key] ?? $default;
     }
 
     // Check if input key exists in POST or GET
@@ -161,6 +157,31 @@ class Request
     public function path(): string
     {
         return $this->uri;
+    }
+
+    public function session(): Session
+    {
+        return $this->session;
+    }
+
+    public function setRouteAttributes(array $attributes): void
+    {
+        $this->routeAttributes = $attributes;
+    }
+
+    public function getRouteAttribute(string $key): mixed
+    {
+        return $this->routeAttributes[$key] ?? null;
+    }
+
+    public function getUserRole(): string
+    {
+        return $this->session->get('user_role', 'guest');
+    }
+
+    public function getRoute(): string
+    {
+        return $this->routeAttributes['route'] ?? '';
     }
 }
 

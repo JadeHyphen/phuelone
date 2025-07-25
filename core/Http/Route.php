@@ -9,10 +9,11 @@ class Route
 {
     protected string $method;
     protected string $uri;
-    protected array|callable $action;
+    protected mixed $action; // Updated to mixed to resolve the fatal error
     protected array $middleware = [];
+    protected array $attributes = [];
 
-    public function __construct(string $method, string $uri, callable|array $action)
+    public function __construct(string $method, string $uri, mixed $action)
     {
         $this->method = $method;
         $this->uri = $uri;
@@ -23,6 +24,17 @@ class Route
     {
         $this->middleware = $middleware;
         return $this;
+    }
+
+    public function attribute(string $key, mixed $value): static
+    {
+        $this->attributes[$key] = $value;
+        return $this;
+    }
+
+    public function getAttribute(string $key): mixed
+    {
+        return $this->attributes[$key] ?? null;
     }
 
     public function matches(Request $request): bool

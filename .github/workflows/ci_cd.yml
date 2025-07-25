@@ -1,0 +1,60 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: mbstring, json, curl
+
+    - name: Install dependencies
+      run: composer install --no-dev --prefer-dist
+
+    - name: Run tests
+      run: vendor/bin/phpunit --coverage-text
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: mbstring, json, curl
+
+    - name: Install dependencies
+      run: composer install --no-dev --prefer-dist
+
+    - name: Run linter
+      run: vendor/bin/phpcs --standard=PSR12 app/ core/
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to server
+      run: |
+        rsync -avz --exclude='.env' ./ user@your-server:/path/to/deployment
+        ssh user@your-server 'cd /path/to/deployment && composer install --no-dev --prefer-dist && php artisan migrate --force'

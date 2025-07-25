@@ -14,12 +14,19 @@
     "php": "^8.3",
     "ext-json": "*",
     "ext-mbstring": "*",
-    "erusev/parsedown": "^1.7"
+    "erusev/parsedown": "^1.7",
+    "monolog/monolog": "^2.9",
+    "paypal/paypal-server-sdk": "^1.1",
+    "php-amqplib/php-amqplib": "^3.7",
+    "predis/predis": "^3.1",
+    "sentry/sentry-laravel": "*"
   },
   "autoload": {
     "psr-4": {
       "Phuelone\\": "core/",
-      "App\\": "app/"
+      "Core\\": "core/",
+      "App\\": "app/",
+      "Core\\Cache\\": "core/Cache/"
     },
     "files": [
       "core/Support/helpers.php"
@@ -49,5 +56,8 @@
     }
   },
   "minimum-stability": "stable",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "require-dev": {
+    "phpunit/phpunit": "^12.2"
+  }
 }

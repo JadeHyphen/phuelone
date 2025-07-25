@@ -83,6 +83,22 @@ class Response
              ->header('Location', $url)
              ->send();
     }
+
+    /**
+     * Get the HTTP status code.
+     */
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * Get the content of the response.
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
 }
 
 ?>

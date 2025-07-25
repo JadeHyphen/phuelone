@@ -48,6 +48,14 @@ class Router
     }
 
     /**
+     * Register a fallback route.
+     */
+    public function fallback(callable $action): void
+    {
+        $this->routes['fallback'] = $action;
+    }
+
+    /**
      * Dispatch the incoming request.
      */
     public function dispatch(Request $request): Response
@@ -62,16 +70,24 @@ class Router
             }
         }
 
-        return new Response('404 Not Found', 404);
+        if (isset($this->routes['fallback'])) {
+            return call_user_func($this->routes['fallback'], $request) ?? new Response('', 404);
+        }
+
+        return new Response('<html><body><h1>404 Not Found</h1></body></html>', 404);
     }
 
 
-    protected function callAction(array $action, Request $request, array $params): Response
+    protected function callAction(array|callable $action, Request $request, array $params): Response
     {
-        [$controllerClass, $method] = $action;
-        $controller = new $controllerClass;
+        if (is_array($action)) {
+            [$controllerClass, $method] = $action;
+            $controller = new $controllerClass;
 
-        return call_user_func_array([$controller, $method], array_merge([$request], $params));
+            return call_user_func_array([$controller, $method], array_merge([$request], $params));
+        }
+
+        return call_user_func_array($action, array_merge([$request], $params));
     }
 
     protected function convertUriToRegex(string $uri): string
