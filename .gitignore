@@ -1,0 +1,56 @@
+# OS/System
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*.local
+
+# Composer
+/vendor/
+
+# Node (if you add front-end tooling later)
+/node_modules/
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and temp
+/storage/logs/
+*.log
+
+# Cache
+/storage/cache/
+/bootstrap/cache/
+/core/Support/cache/
+
+# Views compiled
+/storage/views/
+
+# PHPUnit
+.phpunit.result.cache
+
+# Build files
+/public/assets/css/
+/public/assets/js/
+
+# Phuelone-specific
+phuelone
+
+# Ignore user-generated files
+*.bak
+*.tmp
+*.swp
+*.lock
+*.zip
+*.tar.gz
+*.gz
+*.rar
+*.log
+
+# Ignore IDE specific files
+.idea/
+.vscode/

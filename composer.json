@@ -1,0 +1,53 @@
+{
+  "name": "phuelone/framework",
+  "description": "Phuelone is an artisan styled php framework that is designed to be simple, elegant, and powerful.",
+  "keywords": ["php", "framework", "ghasly", "phuel", "phuelone"],
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Jade Taluwa Lewis",
+      "email": "you@example.com"
+    }
+  ],
+  "require": {
+    "php": "^8.3",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "erusev/parsedown": "^1.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Phuelone\\": "core/",
+      "App\\": "app/"
+    },
+    "files": [
+      "core/Support/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "bin": [
+    "phuelone"
+  ],
+  "scripts": {
+    "post-install-cmd": [
+      "@php phuelone optimize"
+    ],
+    "post-update-cmd": [
+      "@php phuelone optimize"
+    ]
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "platform": {
+      "php": "8.3.0"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
